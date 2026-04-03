@@ -3,12 +3,13 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
+import cookieParser from "cookie-parser";
 
 import globalErrorHandler from "./middlewares/error.middleware.js";
 import AppError from "./utils/appError.util.js";
 
 import authRoutes from "./routes/auth.routes.js";
-
+import adminRoutes from "./routes/admin.routes.js";
 const app = express();
 
 // GLOBAL MIDDLEWARES
@@ -28,11 +29,14 @@ const limiter = rateLimit({
 });
 app.use("/api", limiter);
 
-// Body parser
+// Body and cookie parser
 app.use(express.json());
+app.use(cookieParser());
 
 // ROUTES
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/admin", adminRoutes);
+
 
 // For undefined Routes
 app.use((req, res, next) => {

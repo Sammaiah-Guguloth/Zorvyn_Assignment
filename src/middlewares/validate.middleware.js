@@ -1,5 +1,6 @@
 import AppError from "../utils/appError.util.js";
 
+// Middleware for validation
 const validate = (schema) => (req, res, next) => {
   try {
     schema.parse({
@@ -9,8 +10,14 @@ const validate = (schema) => (req, res, next) => {
     });
     next();
   } catch (error) {
-    const message = error.errors.map((err) => err.message).join(", ");
-    return next(new AppError(message, 400));
+    const errorList = error.errors || error.issues || [];
+
+    if (errorList.length > 0) {
+      const message = errorList.map((err) => err.message).join(", ");
+      return next(new AppError(message, 400));
+    }
+
+    return next(new AppError(error.message || "Invalid input", 400));
   }
 };
 
