@@ -28,7 +28,7 @@ export const updateRecord = catchAsync(async (req, res, next) => {
   const updatedRecord = await recordModel.findByIdAndUpdate(
     req.params.id,
     req.body,
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   );
 
   res.status(200).json({
