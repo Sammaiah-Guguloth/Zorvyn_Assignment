@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ROLES } from "../utils/constants.util.js";
+import { ROLES, STATUS } from "../utils/constants.util.js";
 
 // Validation schema for login
 export const loginSchema = z.object({
@@ -33,6 +33,16 @@ export const createUserSchema = z.object({
     role: z.enum(Object.values(ROLES), {
       required_error: "Role is required",
       invalid_type_error: "Invalid role",
+    }),
+  }),
+});
+
+// Validation schema for updating user status
+export const updateStatusSchema = z.object({
+  body: z.object({
+    status: z.enum(Object.values(STATUS), {
+      required_error: "Status is required",
+      invalid_type_error: "Invalid status",
     }),
   }),
 });

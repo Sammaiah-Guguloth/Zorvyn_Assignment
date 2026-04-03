@@ -58,3 +58,27 @@ export const getAllUsers = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// Controller to toggle user status
+export const updateUserStatus = catchAsync(async (req, res, next) => {
+  const { status } = req.body;
+  const user = await userModel.findById(req.params.id);
+
+  if (!user) {
+    return next(new AppError("No user found with that ID", 404));
+  }
+
+  if (user.id === req.user.id) {
+    return next(new AppError("You cannot change your own status", 400));
+  }
+
+  user.status = status;
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    },
+  });
+});

@@ -3,7 +3,7 @@ import * as adminController from "../controllers/admin.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 import { restrictTo } from "../middlewares/role.middleware.js";
 import validate from "../middlewares/validate.middleware.js";
-import { createUserSchema } from "../validations/user.validation.js";
+import { createUserSchema, updateStatusSchema } from "../validations/user.validation.js";
 import { ROLES } from "../utils/constants.util.js";
 
 const router = express.Router();
@@ -22,5 +22,11 @@ router.post("/users", validate(createUserSchema), adminController.createUser);
  * @access  Private/Admin
  */
 router.get("/users", adminController.getAllUsers);
+
+/**
+ * @route   PATCH /api/v1/admin/users/:id/status
+ * @access  Private/Admin
+ */
+router.patch("/users/:id/status", validate(updateStatusSchema), adminController.updateUserStatus);
 
 export default router;

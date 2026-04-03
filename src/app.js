@@ -10,6 +10,7 @@ import AppError from "./utils/appError.util.js";
 
 import authRoutes from "./routes/auth.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
+import recordRoutes from "./routes/record.routes.js";
 const app = express();
 
 // GLOBAL MIDDLEWARES
@@ -36,6 +37,7 @@ app.use(cookieParser());
 // ROUTES
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/records", recordRoutes);
 
 
 // For undefined Routes
