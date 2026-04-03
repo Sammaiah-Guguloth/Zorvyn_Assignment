@@ -14,3 +14,14 @@ export const createRecordSchema = z.object({
     description: z.string().optional(),
   }),
 });
+
+// Validation schema for updating a record
+export const updateRecordSchema = z.object({
+  body: z.object({
+    amount: z.number().positive("Amount must be positive").optional(),
+    type: z.enum(Object.values(TRANSACTION_TYPES)).optional(),
+    category: z.string().min(1, "Category cannot be empty").optional(),
+    date: z.string().datetime().optional().or(z.date().optional()),
+    description: z.string().optional(),
+  }),
+});

@@ -16,3 +16,25 @@ export const createRecord = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// Controller for updating a financial record
+export const updateRecord = catchAsync(async (req, res, next) => {
+  const record = await recordModel.findOne({ _id: req.params.id, deletedAt: null });
+
+  if (!record) {
+    return next(new AppError("No active record found with that ID", 404));
+  }
+
+  const updatedRecord = await recordModel.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      record: updatedRecord,
+    },
+  });
+});
