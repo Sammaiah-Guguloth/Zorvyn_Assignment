@@ -17,7 +17,7 @@ const seedAdmin = async () => {
     const adminExists = await userModel.findOne({ role: ROLES.ADMIN });
 
     if (adminExists) {
-      console.log("⚠️  Admin already exists in the database. Skipping seed.");
+      console.log("Admin already exists in the database. Skipping seed.");
       process.exit(0);
     }
 

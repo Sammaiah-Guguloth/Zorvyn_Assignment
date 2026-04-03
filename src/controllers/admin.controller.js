@@ -44,3 +44,17 @@ export const createUser = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// Controller to get all users
+export const getAllUsers = catchAsync(async (req, res, next) => {
+  // Exclude the current admin from the returned list of users
+  const users = await userModel.find({ _id: { $ne: req.user.id } }).select("-password");
+
+  res.status(200).json({
+    status: "success",
+    results: users.length,
+    data: {
+      users,
+    },
+  });
+});

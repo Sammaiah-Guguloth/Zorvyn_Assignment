@@ -17,4 +17,10 @@ router.use(restrictTo(ROLES.ADMIN));
  */
 router.post("/users", validate(createUserSchema), adminController.createUser);
 
+/**
+ * @route   GET /api/v1/admin/users
+ * @access  Private/Admin
+ */
+router.get("/users", adminController.getAllUsers);
+
 export default router;
