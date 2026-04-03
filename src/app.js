@@ -7,6 +7,8 @@ import rateLimit from "express-rate-limit";
 import globalErrorHandler from "./middlewares/error.middleware.js";
 import AppError from "./utils/appError.util.js";
 
+import authRoutes from "./routes/auth.routes.js";
+
 const app = express();
 
 // GLOBAL MIDDLEWARES
@@ -30,7 +32,7 @@ app.use("/api", limiter);
 app.use(express.json());
 
 // ROUTES
-// app.use('/api/v1/auth', authRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 // For undefined Routes
 app.use((req, res, next) => {
