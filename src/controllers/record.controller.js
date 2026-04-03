@@ -57,3 +57,52 @@ export const deleteRecord = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+// Controller for fetching and filtering records natively
+export const getAllRecords = catchAsync(async (req, res, next) => {
+  const { category, type, startDate, endDate, search, page = 1, limit = 10 } = req.query;
+
+  // Enforce excluding logically deleted entries globally
+  const query = { deletedAt: null };
+
+  if (category) query.category = category;
+  if (type) query.type = type;
+
+  if (startDate || endDate) {
+    query.date = {};
+    if (startDate) query.date.$gte = new Date(startDate);
+    if (endDate) query.date.$lte = new Date(endDate);
+  }
+
+  // Soft fuzzy index matching for generic text searches
+  if (search) {
+    query.$or = [
+      { description: { $regex: search, $options: "i" } },
+      { category: { $regex: search, $options: "i" } },
+    ];
+  }
+
+  const skip = (page - 1) * limit;
+
+  const records = await recordModel
+    .find(query)
+    .sort({ date: -1 })
+    .skip(skip)
+    .limit(limit * 1)
+    .populate("createdBy", "name email role");
+
+  const total = await recordModel.countDocuments(query);
+
+  res.status(200).json({
+    status: "success",
+    results: records.length,
+    pagination: {
+      total,
+      page: page * 1,
+      pages: Math.ceil(total / limit),
+    },
+    data: {
+      records,
+    },
+  });
+});
