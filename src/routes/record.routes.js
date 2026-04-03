@@ -34,4 +34,15 @@ router.patch(
   recordController.updateRecord
 );
 
+/**
+ * @route   DELETE /api/v1/records/:id
+ * @desc    Soft delete a record
+ * @access  Private (Admin Only)
+ */
+router.delete(
+  "/:id",
+  restrictTo(ROLES.ADMIN),
+  recordController.deleteRecord
+);
+
 export default router;
