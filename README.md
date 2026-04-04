@@ -32,6 +32,8 @@ A production-ready **RESTful API** built with **Node.js**, **Express**, and **Mo
 
 This project implements a secure, multi-role financial records management system. It supports three distinct user roles — **Admin**, **Analyst**, and **Viewer** — each with precisely scoped access to records and analytics. The system features JWT-based authentication delivered via HTTP-only cookies, Zod schema validation, soft-delete record management, and an analytics engine powered by MongoDB aggregation pipelines.
 
+> 🧠 **Thought process:** For a detailed breakdown of the architectural decisions, potential problems, and rationale behind the tech stack, please refer to the [THOUGHT_PROCESS.md](./THOUGHT_PROCESS.md) file.
+
 ---
 
 ## Features
