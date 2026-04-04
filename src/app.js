@@ -41,6 +41,11 @@ app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/records", recordRoutes);
 app.use("/api/v1/analytics", analyticsRoutes);
 
+// Swagger Documentation Route
+import swaggerUi from "swagger-ui-express";
+import swaggerDocs from "./config/swagger.config.js";
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 // For undefined Routes
 app.use((req, res, next) => {

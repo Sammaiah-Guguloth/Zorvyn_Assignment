@@ -1,0 +1,206 @@
+openapi: 3.0.0
+info:
+  title: Finance Dashboard API
+  version: 1.0.0
+tags:
+  - name: Auth
+  - name: Admin
+  - name: Records
+  - name: Analytics
+paths:
+  /api/v1/auth/login:
+    post:
+      summary: Login user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+  /api/v1/auth/change-password:
+    post:
+      summary: Change user password
+      tags: [Auth]
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [oldPassword, newPassword]
+              properties:
+                oldPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        '200':
+          description: Password changed
+  /api/v1/admin/users:
+    get:
+      summary: Get all users
+      tags: [Admin]
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of users
+    post:
+      summary: Create a user
+      tags: [Admin]
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, role]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                role:
+                  type: string
+      responses:
+        '201':
+          description: User created
+  '/api/v1/admin/users/{id}':
+    delete:
+      summary: Delete a user
+      tags: [Admin]
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted
+  '/api/v1/admin/users/{id}/status':
+    patch:
+      summary: Update user status
+      tags: [Admin]
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+      responses:
+        '200':
+          description: Status updated
+  /api/v1/records:
+    get:
+      summary: Get financial records
+      tags: [Records]
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of records
+    post:
+      summary: Create a financial record
+      tags: [Records]
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                amount:
+                  type: number
+                category:
+                  type: string
+                date:
+                  type: string
+      responses:
+        '201':
+          description: Record created
+  '/api/v1/records/{id}':
+    patch:
+      summary: Update a financial record
+      tags: [Records]
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Record updated
+    delete:
+      summary: Delete a financial record
+      tags: [Records]
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Record deleted
+  /api/v1/analytics/summary:
+    get:
+      summary: Get net balance and basic income/expense overview
+      tags: [Analytics]
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Basic summary object
+  /api/v1/analytics/stats:
+    get:
+      summary: Get advanced category and historical monthly trend stats
+      tags: [Analytics]
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Deep statistics payload
