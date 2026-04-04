@@ -11,17 +11,6 @@ const router = express.Router();
 router.use(protect);
 
 /**
- * @route   GET /api/v1/records
- * @desc    List records natively executing extensive parameter filters
- * @access  Private (Admin, Analyst, Viewer)
- */
-router.get(
-  "/",
-  restrictTo(ROLES.ADMIN, ROLES.ANALYST, ROLES.VIEWER),
-  recordController.getAllRecords
-);
-
-/**
  * @route   POST /api/v1/records
  * @desc    Create a record
  * @access  Private (Admin Only)
@@ -55,5 +44,17 @@ router.delete(
   restrictTo(ROLES.ADMIN),
   recordController.deleteRecord
 );
+
+/**
+ * @route   GET /api/v1/records
+ * @desc    List records natively executing extensive parameter filters
+ * @access  Private (Admin, Analyst, Viewer)
+ */
+router.get(
+  "/",
+  restrictTo(ROLES.ADMIN, ROLES.ANALYST, ROLES.VIEWER),
+  recordController.getAllRecords
+);
+
 
 export default router;

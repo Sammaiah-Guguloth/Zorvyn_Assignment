@@ -82,3 +82,23 @@ export const updateUserStatus = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+// Controller to delete a user
+export const deleteUser = catchAsync(async (req, res, next) => {
+  const user = await userModel.findById(req.params.id);
+
+  if (!user) {
+    return next(new AppError("No user found with that ID", 404));
+  }
+
+  if (user.id === req.user.id) {
+    return next(new AppError("You cannot delete your own account", 400));
+  }
+
+  await userModel.findByIdAndDelete(req.params.id);
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});

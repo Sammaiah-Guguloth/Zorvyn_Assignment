@@ -29,4 +29,10 @@ router.get("/users", adminController.getAllUsers);
  */
 router.patch("/users/:id/status", validate(updateStatusSchema), adminController.updateUserStatus);
 
+/**
+ * @route   DELETE /api/v1/admin/users/:id
+ * @access  Private/Admin
+ */
+router.delete("/users/:id", adminController.deleteUser);
+
 export default router;
