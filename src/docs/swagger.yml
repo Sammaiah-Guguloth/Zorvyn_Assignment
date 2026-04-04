@@ -27,6 +27,13 @@ paths:
       responses:
         '200':
           description: Successful login
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  token: "eyJhbG..."
+                  data: { user: { email: "user@example.com" } }
   /api/v1/auth/change-password:
     post:
       summary: Change user password
@@ -48,6 +55,12 @@ paths:
       responses:
         '200':
           description: Password changed
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  token: "eyJhbG..."
   /api/v1/admin/users:
     get:
       summary: Get all users
@@ -57,6 +70,13 @@ paths:
       responses:
         '200':
           description: List of users
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  results: 1
+                  data: { users: [] }
     post:
       summary: Create a user
       tags: [Admin]
@@ -79,6 +99,12 @@ paths:
       responses:
         '201':
           description: User created
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  data: { user: { name: "New User" } }
   '/api/v1/admin/users/{id}':
     delete:
       summary: Delete a user
@@ -119,6 +145,12 @@ paths:
       responses:
         '200':
           description: Status updated
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  data: { user: { status: "inactive" } }
   /api/v1/records:
     get:
       summary: Get financial records
@@ -128,6 +160,13 @@ paths:
       responses:
         '200':
           description: List of records
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  results: 1
+                  data: { records: [] }
     post:
       summary: Create a financial record
       tags: [Records]
@@ -151,6 +190,12 @@ paths:
       responses:
         '201':
           description: Record created
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  data: { record: { amount: 100 } }
   '/api/v1/records/{id}':
     patch:
       summary: Update a financial record
@@ -172,6 +217,12 @@ paths:
       responses:
         '200':
           description: Record updated
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  data: { record: { amount: 150 } }
     delete:
       summary: Delete a financial record
       tags: [Records]
@@ -195,6 +246,12 @@ paths:
       responses:
         '200':
           description: Basic summary object
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  data: { summary: { netBalance: 5000, totalIncome: 6000, totalExpense: 1000 } }
   /api/v1/analytics/stats:
     get:
       summary: Get advanced category and historical monthly trend stats
@@ -204,3 +261,9 @@ paths:
       responses:
         '200':
           description: Deep statistics payload
+          content:
+            application/json:
+              schema:
+                example:
+                  status: "success"
+                  data: { stats: { categoryTotals: [], monthlyTrends: [] } }
