@@ -189,5 +189,45 @@ describe("Admin APIs", () => {
       expect(response.status).toBe(400); // Bad Request from Zod
     });
   });
-});
 
+  describe("DELETE /api/v1/admin/users/:id", () => {
+    it("should safely allow Admin to delete a user", async () => {
+      const response = await request(app)
+        .delete(`/api/v1/admin/users/${analystId}`)
+        .set("Cookie", adminCookie);
+
+      expect(response.status).toBe(204);
+
+      // Verify db
+      const dbUser = await userModel.findById(analystId);
+      expect(dbUser).toBeNull();
+    });
+
+    it("should fail natively preventing Admins from deleting their own account", async () => {
+      const response = await request(app)
+        .delete(`/api/v1/admin/users/${adminId}`)
+        .set("Cookie", adminCookie);
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toMatch(/cannot delete your own account/i);
+    });
+
+    it("should strictly forbid an Analyst from deleting users", async () => {
+      const response = await request(app)
+        .delete(`/api/v1/admin/users/${analystId}`)
+        .set("Cookie", analystCookie);
+
+      expect(response.status).toBe(403);
+    });
+    
+    it("should return 404 if user not found", async () => {
+      const fakeId = "5f8f8c44b6b6b71f9c8f9c12"; // Sample Mongo ObjectID
+      const response = await request(app)
+        .delete(`/api/v1/admin/users/${fakeId}`)
+        .set("Cookie", adminCookie);
+
+      expect(response.status).toBe(404);
+      expect(response.body.message).toMatch(/No user found with that ID/i);
+    });
+  });
+});
