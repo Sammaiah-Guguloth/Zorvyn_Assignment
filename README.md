@@ -24,6 +24,8 @@ A production-ready **RESTful API** built with **Node.js**, **Express**, and **Mo
 - [Roles & Permissions](#roles--permissions)
 - [Data Models](#data-models)
 - [Testing](#testing)
+  - [Running Tests](#running-tests)
+  - [Test Infrastructure & Coverage](#test-infrastructure--coverage)
 - [Project Structure](#project-structure)
 
 ---
@@ -70,24 +72,11 @@ This project implements a secure, multi-role financial records management system
 
 ## Architecture
 
-```
-server.js                  # Entry point — DB connection, process error handlers
-src/
-├── app.js                 # Express app setup — middleware stack, route mounting
-├── config/
-│   ├── db.config.js       # MongoDB connection
-│   └── mailer.config.js   # Nodemailer transporter
-├── controllers/           # Route handler logic
-├── middlewares/           # Auth, role guard, validation, global error handler
-├── models/                # Mongoose schemas (User, Record)
-├── routes/                # Express routers (auth, admin, records, analytics)
-├── services/              # Business logic layer (analytics aggregations)
-├── utils/                 # AppError, catchAsync, constants
-└── validations/           # Zod schemas for request validation
-scripts/
-└── seed.js                # Database seeder
-tests/                     # Jest integration test suites
-```
+The system follows a strict, modular **Service-Controller** architecture. Business logic and analytics pipelines are decoupled from standard request parsing, ensuring that authentication (`JWT`), strict request validations (`Zod`), and database querying (`MongoDB`) operate harmoniously. This separation of concerns creates a highly scalable and easily testable codebase.
+
+<p align="center">
+  <img src="assets/zorvyn_architecture_diagram.svg" alt="Zorvyn Architecture Diagram" width="100%">
+</p>
 
 ---
 
@@ -266,18 +255,26 @@ All admin routes require the `Admin` role.
 
 ## Testing
 
-The test suite uses **Jest** with **Supertest** for HTTP assertions and **mongodb-memory-server** for an isolated, in-memory MongoDB instance — no external database required.
+The test suite uses **Jest** with **Supertest** for HTTP assertions and **mongodb-memory-server** for an isolated, in-memory MongoDB instance. This guarantees that tests can run anywhere with zero external database dependencies.
+
+### Running Tests
 
 ```bash
+# Run all automated tests
 npm test
+
+# Run tests and generate a complete coverage report
+npm test -- --coverage
 ```
 
-Test suites cover:
+### Test Infrastructure & Coverage
 
-- `auth.test.js` — Login, change password, session handling
-- `admin.test.js` — User creation, status updates, deletion
-- `record.test.js` — CRUD operations, soft delete, filtering
-- `analytics.test.js` — Summary and stats aggregation endpoints
+A custom setup script (`tests/setup.js`) orchestrates the in-memory database, automatically clearing collections between tests to ensure complete isolation. The testing scope includes:
+
+- **`auth.test.js`** — Validates login credentials, secure cookie issuance, JWT verification, and the enforced first-login password change logic.
+- **`admin.test.js`** — Ensures only Admins can hit provisioning endpoints, verifying user creation, status toggling (active/inactive), and safe deletion algorithms.
+- **`record.test.js`** — Covers complete REST CRUD patterns, numeric validation for balances, soft-deletion overrides, and complex filtering algorithms.
+- **`analytics.test.js`** — Verifies MongoDB aggregation pipelines ensuring accurate mathematical calculations for net sums, precise categorisation, and monthly grouping.
 
 ---
 
