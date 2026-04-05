@@ -69,6 +69,14 @@ When the server is running locally, you can access the interactive Swagger UI at
 
 The Swagger UI allows you to directly test the API endpoints with a built-in "Authorize" feature for JWT Bearer tokens.
 
+### 🧪 Test Credentials
+For immediate testing, you can use these pre-seeded Admin credentials:
+- **Email:** `testadmin@gmail.com`
+- **Password:** `test@1234`
+- **Role:** `Admin`
+
+---
+
 ---
 
 ## Deployment
