@@ -9,6 +9,7 @@ A production-ready **RESTful API** built with **Node.js**, **Express**, and **Mo
 - [Overview](#overview)
 - [Features](#features)
 - [API Documentation](#api-documentation)
+- [Deployment](#deployment)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
@@ -67,6 +68,17 @@ When the server is running locally, you can access the interactive Swagger UI at
 `http://localhost:5000/api-docs`
 
 The Swagger UI allows you to directly test the API endpoints with a built-in "Authorize" feature for JWT Bearer tokens.
+
+---
+
+## Deployment
+
+The API is live and can be accessed at the following URL:
+
+🚀 **Live Link:** [https://zorvyn-assignment-fnlh.onrender.com/](https://zorvyn-assignment-fnlh.onrender.com/)
+
+> [!NOTE]
+> The live server might take a few seconds to spin up due to Render's free tier "spinning down" after inactivity.
 
 ---
 
