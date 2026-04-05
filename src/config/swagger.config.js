@@ -13,8 +13,12 @@ const swaggerOptions = {
     },
     servers: [
       {
+        url: "https://zorvyn-assignment-fnlh.onrender.com",
+        description: "Production Server (Render)",
+      },
+      {
         url: "http://localhost:5000",
-        description: "Development Server",
+        description: "Local Development Server",
       },
     ],
     components: {
