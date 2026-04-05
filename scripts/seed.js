@@ -11,13 +11,13 @@ const seedAdmin = async () => {
     // Establish Database Connection
     await connectToDB();
 
-    console.log("Checking for existing System Admin...");
+    console.log(`Checking for existing Admin with email: ${process.env.ADMIN_EMAIL}...`);
 
-    // Prevent duplicate Admin creation
-    const adminExists = await userModel.findOne({ role: ROLES.ADMIN });
+    // Prevent duplicate Admin creation for the same email
+    const adminExists = await userModel.findOne({ email: process.env.ADMIN_EMAIL });
 
     if (adminExists) {
-      console.log("Admin already exists in the database. Skipping seed.");
+      console.log(`Admin with email [${process.env.ADMIN_EMAIL}] already exists. Skipping seed.`);
       process.exit(0);
     }
 
