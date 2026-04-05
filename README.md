@@ -8,6 +8,7 @@ A production-ready **RESTful API** built with **Node.js**, **Express**, and **Mo
 
 - [Overview](#overview)
 - [Features](#features)
+- [API Documentation](#api-documentation)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
@@ -50,6 +51,22 @@ This project implements a secure, multi-role financial records management system
 - **Security Hardening** — Helmet headers, CORS, rate limiting (100 req/hour per IP), bcrypt password hashing
 - **Global Error Handling** — Centralised `AppError` class and async wrapper (`catchAsync`) across all controllers
 - **Testing Suite** — Jest + Supertest integration tests backed by `mongodb-memory-server`
+
+---
+
+## API Documentation
+
+The API is fully documented using Postman and Swagger. You can access the live documentation and collections via the links below:
+
+### Live Postman Docs
+- **Public Documentation:** [View on Postman Documenter](https://documenter.getpostman.com/view/34605710/2sBXiqDo8e)
+- **Postman Collection:** [Import Collection](https://www.postman.com/dragon-6129/sammaiah-guguloth/collection/34605710-037fae41-910c-433a-bbd8-744c576529a3)
+
+### Swagger UI
+When the server is running locally, you can access the interactive Swagger UI at:
+`http://localhost:5000/api-docs`
+
+The Swagger UI allows you to directly test the API endpoints with a built-in "Authorize" feature for JWT Bearer tokens.
 
 ---
 
@@ -146,67 +163,22 @@ The server will be available at `http://localhost:5000`.
 
 All endpoints are prefixed with `/api/v1`. The API enforces a global rate limit of **100 requests per hour** per IP.
 
-### Authentication
+### API Summary Table
 
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| `POST` | `/auth/login` | Public | Log in with email and password |
-| `POST` | `/auth/change-password` | Private | Change the authenticated user's password |
-
-**Login Request**
-```json
-{
-  "email": "user@example.com",
-  "password": "yourpassword"
-}
-```
-
-**Login Response** — Sets an HTTP-only `jwt` cookie and returns a token in the response body.
-
----
-
-### Admin
-
-All admin routes require the `Admin` role.
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/admin/users` | Create a new user (Admin / Analyst / Viewer) |
-| `GET` | `/admin/users` | Retrieve all users |
-| `PATCH` | `/admin/users/:id/status` | Activate or deactivate a user account |
-| `DELETE` | `/admin/users/:id` | Delete a user |
-
----
-
-### Records
-
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| `POST` | `/records` | Admin | Create a financial record |
-| `PATCH` | `/records/:id` | Admin | Update a financial record |
-| `DELETE` | `/records/:id` | Admin | Soft-delete a record |
-| `GET` | `/records` | Admin, Analyst, Viewer | List and filter records |
-
-**Query Parameters for `GET /records`**
-
-| Parameter | Type | Description |
-|---|---|---|
-| `category` | `string` | Filter by category (e.g., `Salary`, `Food`) |
-| `type` | `string` | `income` or `expense` |
-| `startDate` | `ISO date` | Filter records from this date |
-| `endDate` | `ISO date` | Filter records up to this date |
-| `search` | `string` | Fuzzy search on description and category |
-| `page` | `number` | Page number (default: `1`) |
-| `limit` | `number` | Records per page (default: `10`) |
-
----
-
-### Analytics
-
-| Method | Endpoint | Access | Description |
-|---|---|---|---|
-| `GET` | `/analytics/summary` | Admin, Analyst | Total net balance, income, and expenses |
-| `GET` | `/analytics/stats` | Admin only | Category-wise sums and monthly trend data |
+| Category | Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Auth** | `POST` | `/auth/login` | Public | Log in with email and password |
+| | `POST` | `/auth/change-password` | Private | Change the authenticated user's password |
+| **Admin** | `GET` | `/admin/users` | Admin | Retrieve all users |
+| | `POST` | `/admin/users` | Admin | Create a new user (Admin / Analyst / Viewer) |
+| | `PATCH` | `/admin/users/:id/status` | Admin | Activate or deactivate a user account |
+| | `DELETE` | `/admin/users/:id` | Admin | Delete a user permanently |
+| **Records** | `GET` | `/records` | All Roles | List and filter records (Pagination included) |
+| | `POST` | `/records` | Admin | Create a new financial record |
+| | `PATCH` | `/records/:id` | Admin | Update an existing financial record |
+| | `DELETE` | `/records/:id` | Admin | Soft-delete a record |
+| **Analytics**| `GET` | `/analytics/summary` | Admin, Analyst | Total net balance, income, and expenses |
+| | `GET` | `/analytics/stats` | Admin | Category-wise sums and monthly trend data |
 
 ---
 
