@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard API | Assignment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-canvas-default: #0d1117;
+            --color-canvas-subtle: #161b22;
+            --color-border-default: #30363d;
+            --color-fg-default: #c9d1d9;
+            --color-fg-muted: #8b949e;
+            --color-accent-fg: #58a6ff;
+            --color-btn-bg: #21262d;
+            --color-btn-hover-bg: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            background-color: var(--color-canvas-default);
+            color: var(--color-fg-default);
+            line-height: 1.5;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border-default);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .links-bar {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-accent-fg);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--color-btn-bg);
+            border: 1px solid var(--color-border-default);
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .link-item:hover {
+            background: var(--color-btn-hover-bg);
+        }
+
+        section {
+            margin-bottom: 2.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--color-border-default);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--color-fg-muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background-color: var(--color-canvas-subtle);
+            border: 1px solid var(--color-border-default);
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-fg-default);
+        }
+
+        .tech-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: #1f6feb22;
+            color: var(--color-accent-fg);
+            padding: 0.2rem 0.6rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid var(--color-accent-fg);
+        }
+
+        ul {
+            list-style-position: inside;
+            margin-bottom: 1rem;
+            color: var(--color-fg-muted);
+        }
+
+        li {
+            margin-bottom: 0.25rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-border-default);
+            text-align: center;
+            color: var(--color-fg-muted);
+            font-size: 0.9rem;
+        }
+
+        .author {
+            color: var(--color-fg-default);
+            font-weight: 600;
+        }
+
+        code {
+            background-color: rgba(110, 118, 129, 0.4);
+            padding: 0.2rem 0.4rem;
+            border-radius: 6px;
+            font-size: 85%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Finance Dashboard API — Assignment</h1>
+            
+            <div class="links-bar">
+                <a href="https://github.com/Sammaiah-Guguloth/Zorvyn_Assignment" target="_blank" class="link-item">GitHub Repository</a>
+                <a href="https://www.postman.com/dragon-6129/sammaiah-guguloth/collection/34605710-037fae41-910c-433a-bbd8-744c576529a3" target="_blank" class="link-item">Postman Collection</a>
+                <a href="https://documenter.getpostman.com/view/34605710/2sBXiqDo8e" target="_blank" class="link-item">API Documentation</a>
+                <a href="/api-docs" class="link-item">Swagger UI</a>
+            </div>
+        </header>
+
+        <section>
+            <h2>About the Assignment</h2>
+            <p>This project is a back-end RESTful API submission for the Zorvyn full-stack assignment. It is designed to manage financial records with a focus on security, role-based access control (RBAC), and analytics data processing.</p>
+        </section>
+
+        <section>
+            <h2>Technologies Used</h2>
+            <div class="tech-tags">
+                <span class="tag">Node.js</span>
+                <span class="tag">Express.js</span>
+                <span class="tag">MongoDB</span>
+                <span class="tag">Mongoose</span>
+                <span class="tag">JWT</span>
+                <span class="tag">Zod</span>
+                <span class="tag">BcryptJS</span>
+                <span class="tag">Jest</span>
+            </div>
+        </section>
+
+        <section>
+            <h2>Available APIs</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Authentication</h3>
+                    <p>Secure login and password management using <code>bcrypt</code> and <code>JWT</code>.</p>
+                </div>
+                <div class="card">
+                    <h3>Admin Management</h3>
+                    <p>Manage user accounts, roles, and status through restricted endpoints.</p>
+                </div>
+                <div class="card">
+                    <h3>Financial Records</h3>
+                    <p>Complete CRUD operations for transactions with soft-delete support.</p>
+                </div>
+                <div class="card">
+                    <h3>Analytics</h3>
+                    <p>Aggregated data summaries and monthly financial trends via MongoDB pipelines.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>How to Use</h2>
+            <ul>
+                <li>Run <code>npm run dev</code> to start the server locally.</li>
+                <li>Visit <code>/api-docs</code> to see the interactive Swagger UI.</li>
+                <li>Use the Postman links above for a collection and detailed docs.</li>
+                <li>The default API prefix is <code>/api/v1</code>.</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>Zorvyn Assignment &bull; 2026</p>
+            <p>Submitted by <span class="author">Sammaiah Guguloth</span></p>
+        </footer>
+    </div>
+</body>
+</html>
