@@ -1,4 +1,4 @@
-# Zorvyn Assignment — Financial Records Management API
+# Financial Records Management API
 
 A production-ready **RESTful API** built with **Node.js**, **Express**, and **MongoDB** for managing financial records with role-based access control, analytics, and secure authentication.
 
