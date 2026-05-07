@@ -16,7 +16,7 @@ const app = express();
 
 // GLOBAL MIDDLEWARES
 app.use(helmet());
-app.use(cors());
+// app.use(cors());
 
 // Development logging
 if (process.env.NODE_ENV === "development") {
@@ -53,11 +53,54 @@ app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/records", recordRoutes);
 app.use("/api/v1/analytics", analyticsRoutes);
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://notion-like-editor-flame.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
+
+// For the Notion like editor
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// POST /api/sign-upload
+app.post("/api/sign-upload", (req, res) => {
+  const timestamp = Math.round(Date.now() / 1000);
+
+  const paramsToSign = {
+    timestamp,
+    folder: "notion-editor", // optional — organise uploads
+    // eager: 'c_limit,w_1200',   // optional — transform on upload
+  };
+
+  const signature = cloudinary.utils.api_sign_request(
+    paramsToSign,
+    process.env.CLOUDINARY_API_SECRET
+  );
+
+  res.json({
+    signature,
+    timestamp,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    folder: "notion-editor",
+  });
+});
+
 // Swagger Documentation Route
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./config/swagger.config.js";
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
 
 // For undefined Routes
 app.use((req, res, next) => {
