@@ -181,6 +181,87 @@ app.post("/api/get-image-url", (req, res) => {
 
 // =====================================================
 
+// ================= AI Endpoint using Gemini for Notion like editor ================
+
+import { google } from "@ai-sdk/google";
+import { streamText } from "ai";
+import { generateText } from "ai";
+
+app.post("/api/ai/command", async (req, res) => {
+  console.log("req came to /command");
+  const { messages } = req.body;
+
+  try {
+    // Normalize messages from Plate AI format to Vercel AI SDK CoreMessage format
+    const coreMessages = messages.map((m) => ({
+      role: m.role,
+      content: m.content ?? m.parts,
+    }));
+
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    const result = streamText({
+      model: google("gemini-3-flash-preview"),
+      messages: coreMessages,
+      system: `You are a helpful writing assistant inside a rich text editor.
+Help users write, edit, improve, and summarize content.
+Respond in markdown format.`,
+    });
+
+    const dataStreamResponse = result.toUIMessageStreamResponse();
+
+    // Copy headers from Web Response to Express Response
+    dataStreamResponse.headers.forEach((value, key) => {
+      res.setHeader(key, value);
+    });
+
+    // Pipe the Web Stream to Express Response
+    const reader = dataStreamResponse.body.getReader();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      res.write(value);
+    }
+
+    res.end();
+  } catch (error) {
+    console.error("AI Command Error:", error);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Failed to process AI command" });
+    }
+  }
+});
+
+app.post("/api/ai/copilot", async (req, res) => {
+  const { prompt, system } = req.body;
+
+  console.log("req came to /copilot");
+
+  try {
+    const result = await generateText({
+      model: google("gemini-3-flash-preview"),
+      prompt,
+      system,
+      maxOutputTokens: 1000, // Increased limit
+      temperature: 0.7,
+      abortSignal: req.signal,
+    });
+
+    res.json({ text: result.text }); // Explicitly return the text field
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      return res.status(408).json(null);
+    }
+    console.log("error : ", error);
+    res.status(500).json({ error: "Failed to process copilot request" });
+  }
+});
+
+// ========================================================================
+
 // Swagger Documentation Route
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./config/swagger.config.js";

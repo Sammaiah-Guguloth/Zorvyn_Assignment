@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
-import app from "./src/app.js";
-import connectToDB from "./src/config/db.config.js";
+dotenv.config();
 
 // Handle Uncaught Exceptions
 process.on("uncaughtException", (err) => {
@@ -9,11 +8,11 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-dotenv.config();
+import app from "./src/app.js";
+import connectToDB from "./src/config/db.config.js";
 
 // Connect Database
 connectToDB();
-
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
