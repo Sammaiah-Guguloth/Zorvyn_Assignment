@@ -210,20 +210,16 @@ Help users write, edit, improve, and summarize content.
 Respond in markdown format.`,
     });
 
-    const dataStreamResponse = result.toUIMessageStreamResponse();
+    // Manually implement the Vercel AI SDK v3 Data Stream protocol
+    // which the frontend @ai-sdk/react (v3) useChat hook expects.
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
 
-    // Copy headers from Web Response to Express Response
-    dataStreamResponse.headers.forEach((value, key) => {
-      res.setHeader(key, value);
-    });
-
-    // Pipe the Web Stream to Express Response
-    const reader = dataStreamResponse.body.getReader();
-
+    const reader = result.textStream.getReader();
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      res.write(value);
+      // The format is 0:"text_chunk"\n
+      res.write(`0:${JSON.stringify(value)}\n`);
     }
 
     res.end();
